@@ -1,0 +1,44 @@
+{
+    "profile": [
+        {
+            "userProfilePic": "https://storage.googleapis.com/a1aa/image/nUA0zAaWqkYQPtesQpDVgOiTHrXHkkjeMUfTmP8lhCfeA10dC.jpg",
+            "userName": "Donald Trump",
+            "userLocation": "USA",
+            "nationFlag": "https://storage.googleapis.com/a1aa/image/KqU83MChLdoTJR1lbJZWMONddOmhEdkuvs9N16zefKDsomuTA.jpg",
+            "userPosition": "President",
+            "userDescription": "Donald Trump is the 45th President of the United States, known for his business acumen, bold policies, and making America great again.",
+            "photos": [
+                {
+                    "photoUrl": "https://example.com/photo1.jpg",
+                    "photoTitle": "Trump at the White House"
+                },
+                {
+                    "photoUrl": "https://example.com/photo2.jpg",
+                    "photoTitle": "Trump Campaign Rally"
+                },
+                {
+                    "photoUrl": "https://example.com/photo3.jpg",
+                    "photoTitle": "Trump with World Leaders"
+                }
+            ]
+        },
+        {
+            "userProfilePic": "https://st4.depositphotos.com/26724624/28742/i/450/depositphotos_287422858-stock-photo-belgium-eu-israel-diplomacy.jpg",
+            "userName": "Benjamin Netanyahu",
+            "userLocation": "Israel",
+            "nationFlag": "https://t3.ftcdn.net/jpg/02/97/26/16/360_F_297261694_iUts68MZCBpO9WzKYhgB9OePYcOeZAI8.jpg",
+            "userPosition": "Prime Minister",
+            "userDescription": "Benjamin Netanyahu is Israel's longest-serving prime minister. He is dedicated to strengthening Israel's security, economy, and international relations.",
+            "photos": [
+                {
+                    "photoUrl": "https://example.com/photo1.jpg",
+                    "photoTitle": "Netanyahu at the Knesset"
+                },
+                {
+                    "photoUrl": "https://example.com/photo2.jpg",
+                    "photoTitle": "Netanyahu with world leaders"
+                }
+            ]
+        }
+    ]
+}
