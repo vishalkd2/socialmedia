@@ -1,14 +1,28 @@
+buildscript {
+    repositories {
+        google()  // Google's Maven repository for Firebase and other dependencies
+        mavenCentral()  // Add Maven Central for other dependencies
+    }
+    dependencies {
+        // Add the Google Services classpath here
+        classpath 'com.google.firebase:firebase-bom:33.5.1'  // Google services plugin (apply this in your app-level build.gradle)
+        // You don't need to add Firebase BOM in buildscript dependencies
+    }
+}
+
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        google()  // Ensure Google's Maven repository is available
+        mavenCentral()  // Add Maven Central repository
     }
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
