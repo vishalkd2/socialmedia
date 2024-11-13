@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmedia/model/PostModel.dart';
 import 'package:socialmedia/services/DataService.dart';
@@ -12,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('World Leaders'),centerTitle: true,backgroundColor: Colors.cyan.withOpacity(0.5),),
+      appBar: AppBar(title: Text('World Leaders'),centerTitle: true,backgroundColor: Colors.cyan.withOpacity(0.5)),
       floatingActionButton: FloatingActionButton(onPressed: null,child: Icon(Icons.post_add)),
       drawer: Drawer(
         child: ListView(
@@ -26,8 +27,8 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.white,
                 child: ClipOval(child: Image.asset('assets/user/profilepicture.jpg',)),
               ) ,decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/user/profbackground.jpg'),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.darken)),)),
+              image: DecorationImage(image: AssetImage('assets/user/profbackground.jpg'),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.darken)),)),
+
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
@@ -61,7 +62,10 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),
-              onTap: (){},
+              onTap: ()async{
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, '/landingpage');
+              },
             ),
             SizedBox(height: 100,),
             Padding(

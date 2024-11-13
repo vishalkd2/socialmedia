@@ -9,7 +9,6 @@ class UserRegistration extends StatefulWidget {
   @override
   State<UserRegistration> createState() => _UserRegistrationState();
 }
-
 class _UserRegistrationState extends State<UserRegistration> {
   final _namController = TextEditingController();
   final _emailController = TextEditingController();
@@ -39,19 +38,17 @@ class _UserRegistrationState extends State<UserRegistration> {
         email: uemail,
         password: upassword,
       );
-
       // Checking if the user is null
       if (userCredential.user == null) {
         throw Exception("User not created");
       }
-
       String uid = userCredential.user!.uid;
-
       // Firestore - Adding user data
       await _firestore.collection('users').doc(uid).set({
         'name': uname,
         'email': uemail,
         'mobile': umobile,
+        'password':upassword,
         'uid': uid,
       });
 
@@ -88,7 +85,7 @@ class _UserRegistrationState extends State<UserRegistration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('User Registration'), centerTitle: true),
+      appBar: AppBar(title: Text('User Registration'), centerTitle: true,backgroundColor: Colors.cyan.withOpacity(0.5),),
       body: Stack(
         children: [
           Positioned.fill(
@@ -99,13 +96,21 @@ class _UserRegistrationState extends State<UserRegistration> {
               colorBlendMode: BlendMode.darken,
             ),
           ),
-          CustomWidget.customSizeBox(context),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Form(
               key: _formKey,
               child: ListView(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: RichText(text:TextSpan(style:TextStyle(fontSize: 36,fontWeight: FontWeight.bold,letterSpacing: 1.2),
+                          children: [TextSpan(text: "Start",style: TextStyle(color: Colors.deepOrange)),TextSpan(text: "Your"), TextSpan(text: "Journey",style: TextStyle(color: Colors.green))
+                          ])
+                      ),
+                    ),
+                  ),
                   CustomWidget.customSizeBox(context),
                   CustomWidget.customTextFormField(
                     labelName: 'Name',
@@ -176,11 +181,13 @@ class _UserRegistrationState extends State<UserRegistration> {
                     },
                   ),
                   CustomWidget.customSizeBox(context),
-                  CustomWidget.CustomButton(
-                    buttonName: "Submit",
-                    backgroundColor: Colors.white,
-                    fontSize: 20,
-                    onPressed: _registerUser,
+                  Center(
+                    child: CustomWidget.CustomButton(
+                      buttonName: "Submit",
+                      backgroundColor: Colors.white,
+                      fontSize: 20,
+                      onPressed: _registerUser,
+                    ),
                   ),
                 ],
               ),
