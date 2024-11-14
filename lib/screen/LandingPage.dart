@@ -60,9 +60,9 @@ class _HomeScreenState extends State<LandingPage> {
                     textAlign: TextAlign.center, // Center the text
                   ),
                   CustomWidget.customSizeBox(context),
-                  CustomWidget.customTextFormField(labelName: 'Email', keyboardType: TextInputType.emailAddress,controller: _emailController),
+                  CustomWidget.customTextFormField(labelName: 'Email', keyboardType: TextInputType.emailAddress,controller: _emailController, validator: (value){if(value==null||value.isEmpty){return "Email field cant be null.";}}),
                   CustomWidget.customSizeBox(context),
-                  CustomWidget.customTextFormField(labelName: 'Password', keyboardType: TextInputType.text,obsecureText: false,controller: _passwordController),
+                  CustomWidget.customTextFormField(labelName: 'Password', keyboardType: TextInputType.text,obsecureText: false,controller: _passwordController, validator: (value){if(value==null||value.isEmpty){return "Password field cant be null";}}),
                   CustomWidget.customSizeBox(context),
                   Container(alignment: Alignment.centerRight,child: Text("Forget Password",style: TextStyle(color: Colors.white),)),
                   CustomWidget.customSizeBox(context),

@@ -27,12 +27,14 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.white,
                 child: ClipOval(child: Image.asset('assets/user/profilepicture.jpg',)),
               ) ,decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/user/profbackground.jpg'),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.darken)),)),
+              image: DecorationImage(image: AssetImage('assets/user/laptopbaackground1.jpg'),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.darken)),)),
 
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
-              onTap: (){},
+              onTap: (){
+                Navigator.pushNamed(context, '/userprofile');
+              },
             ),
             ListTile(
               leading: Icon(Icons.home),
