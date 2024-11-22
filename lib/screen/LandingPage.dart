@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socialmedia/services/UserRegistrationService.dart';
 import 'package:socialmedia/widgets/CustomWidget.dart';
 
 class LandingPage extends StatefulWidget {
@@ -8,37 +9,64 @@ class LandingPage extends StatefulWidget {
   State<LandingPage> createState() => _HomeScreenState();
 }
 class _HomeScreenState extends State<LandingPage> {
+
   final _emailController=TextEditingController();
   final _passwordController=TextEditingController();
-  final FirebaseAuth _auth=FirebaseAuth.instance;
   final _formKey=GlobalKey<FormState>();
   String? _errorMessage;
-  Future<void> _login()async{
+  bool _isLoading=true;
+
+  @override
+  void initState(){
+    super.initState();
+    _checkLogInStatus();
+  }
+
+  Future<void>_checkLogInStatus()async{
+    final prefs= await SharedPreferences.getInstance();
+    final isLoggedIn=prefs.getBool('isLoggedIn')?? false;
+    print('Is logged in: $isLoggedIn');  // Debugging the value
+    if(isLoggedIn) {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  }
+
+  Future<void> _login() async{
     if(!_formKey.currentState!.validate()){
       return;
     }
+    final email=_emailController.text.trim();
+    final password=_passwordController.text.trim();
     try{
-      print('checking breaking point debugging');
-      final UserCredential userCredential=await _auth.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim()
-      );
-      Navigator.pushReplacementNamed(context, '/home');
+      final isLoginSuccessful=await loginUser(email, password);
+      if(isLoginSuccessful){
+        final prefs=await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        print("Login Successful");
+          Navigator.pushReplacementNamed(context, '/home');
+        }else(e){
+          setState(() {
+            _errorMessage="Inavlid email or password";
+          });
+        };
     }catch(e){
       setState(() {
-        _errorMessage=e.toString();
+        _errorMessage="Error occured : ${e.toString()}";
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // if(_isLoading){
+    //   return Scaffold(body: Center(child: CircularProgressIndicator(),),);
+    // }
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.cyan.withOpacity(.5),
         title: Text("Social Media"),
         centerTitle: true,
       ),
-      body: Stack(
+      body:  Stack(
         children: [Positioned.fill(child: Image.asset('assets/background/socialmediabackground.jpg',fit: BoxFit.cover,colorBlendMode: BlendMode.darken,color: Colors.black.withOpacity(0.7))),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -66,7 +94,11 @@ class _HomeScreenState extends State<LandingPage> {
                   CustomWidget.customSizeBox(context),
                   Container(alignment: Alignment.centerRight,child: Text("Forget Password",style: TextStyle(color: Colors.white),)),
                   CustomWidget.customSizeBox(context),
-                  Center(child: CustomWidget.CustomButton(buttonName: 'Login',backgroundColor: Colors.blue, fontSize: 25, onPressed:_login),),
+                  Center(
+                    child: CustomWidget.CustomButton(
+                        buttonName: 'Login',
+                        backgroundColor: Colors.blue,
+                        fontSize: 25, onPressed:_login),),
                   SizedBox(height: MediaQuery.sizeOf(context).height*.08),
                   GestureDetector(
                     onTap: (){

@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -14,6 +16,8 @@ class _UserProfileState extends State<UserProfile> {
   String gender = 'Male';
   String nationality = 'India';
   String bio = 'Hello, I am a Flutter Developer.';
+  String backgroundPicUrl = 'assets/user/laptopbaackground1.jpg';
+  String profilePicUrl = 'assets/user/profilepicture.jpg';
   List<String> postImages = [
     'https://storage.googleapis.com/a1aa/image/KCXewaamHyRqbyB5i8jWaisBlrfh4MTZ9SQyGtIDlZaVC1wTA.jpg',
     'https://storage.googleapis.com/a1aa/image/shXAEeyjZa2kViSXBw99NrI69dIkEY0ZvHC7COQcW9QMia4JA.jpg',
@@ -43,10 +47,11 @@ class _UserProfileState extends State<UserProfile> {
             // Background image with Edit icon
             Stack(
               children: [
-                Image.asset('assets/user/laptopbaackground1.jpg',width: double.infinity,height: 200,fit: BoxFit.cover),
-                Positioned(bottom: 10, right: 20, child: GestureDetector(onTap: () {}, child: Icon(Icons.edit, color: Colors.blue,size: 30))),
+                Image.asset(backgroundPicUrl,width: double.infinity,height: 200,fit: BoxFit.cover),
+                Positioned(bottom: 10, right: 20, child: GestureDetector(onTap: (){}, child: Icon(Icons.edit, color: Colors.blue,size: 30))),
                 Positioned(bottom:5,left:5,child:Stack(
-                  children: [CircleAvatar(radius: 60,backgroundImage:AssetImage('assets/user/profilepicture.jpg')),
+                  children: [
+                    CircleAvatar(radius: 60,backgroundImage:AssetImage('assets/user/profilepicture.jpg')),
                     Positioned(bottom: 0,right: 0,
                       child: GestureDetector(
                         onTap: () {},
@@ -58,7 +63,6 @@ class _UserProfileState extends State<UserProfile> {
                 ),)
               ],
             ),
-
             // Background card below the profile picture
             Padding(padding: const EdgeInsets.all(2.0),
               child: Card(shape: RoundedRectangleBorder(
@@ -110,7 +114,6 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ),
             ),
-
             // Posts Section
             Padding(padding: const EdgeInsets.all(10.0),child: Text('Posts', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),),
             // Post Images

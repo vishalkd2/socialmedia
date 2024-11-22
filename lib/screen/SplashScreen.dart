@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socialmedia/screen/LandingPage.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -8,6 +9,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return AnimatedSplashScreen(
         splash: Lottie.asset('assets/splashscreen/splash.json'),
         nextScreen: LandingPage(),

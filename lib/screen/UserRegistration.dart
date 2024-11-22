@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmedia/model/UserRegistrationModel.dart';
+import 'package:socialmedia/services/UserRegistrationService.dart';
 import 'package:socialmedia/widgets/CustomWidget.dart';
 
 class UserRegistration extends StatefulWidget {
@@ -10,76 +10,31 @@ class UserRegistration extends StatefulWidget {
   State<UserRegistration> createState() => _UserRegistrationState();
 }
 class _UserRegistrationState extends State<UserRegistration> {
-  final _namController = TextEditingController();
+  final _firstNamController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _mobileController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final UserRegistrationService _userRegistrationService=UserRegistrationService();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Future<void> _registerUser()async{
+    if(_formKey.currentState?.validate()??false){
+      final firstName=_firstNamController.text;
+      final lastName=_lastNameController.text;
+      final email=_emailController.text;
+      final password=_passwordController.text;
+      final profilepic=null;
 
-  Future<void> _registerUser() async {
-    // Corrected condition: Proceed if form is valid
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+      final userModel=UserRegistrationModel(firstname: firstName, lastname: lastName, email: email, password: password,profilepic: profilepic);
 
-    // Safely getting text values
-    String uname = _namController.text.trim();
-    String uemail = _emailController.text.trim();
-    String umobile = _mobileController.text.trim();
-    String upassword = _passwordController.text.trim();
-
-    try {
-      // Firebase Auth - User creation
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: uemail,
-        password: upassword,
-      );
-      // Checking if the user is null
-      if (userCredential.user == null) {
-        throw Exception("User not created");
+      bool isRegistered=await _userRegistrationService.registerUser(userModel);
+      if(isRegistered){
+        _showSuccessDialog(context);
+      }else{
+        _showErrorDialog(context);
       }
-      String uid = userCredential.user!.uid;
-      // Firestore - Adding user data
-      await _firestore.collection('users').doc(uid).set({
-        'name': uname,
-        'email': uemail,
-        'mobile': umobile,
-        'password':upassword,
-        'uid': uid,
-      });
-
-      // Show success dialog
-      _showSuccessDialog();
-    } catch (e) {
-      // Error handling
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Registration Successful'),
-          content: Text('You are registered successfully! Go to Login Page.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Close the dialog and navigate to Login page
-                Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(context, '/landingpage'); // Assuming you have a /login route
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -113,15 +68,26 @@ class _UserRegistrationState extends State<UserRegistration> {
                   ),
                   CustomWidget.customSizeBox(context),
                   CustomWidget.customTextFormField(
-                    labelName: 'Name',
-                    controller: _namController,
+                    labelName: 'First Name',
+                    controller: _firstNamController,
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Name field can't be blank.";
+                        return "Fisrt name field can't be blank.";
                       }
                       if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
-                        return "Please enter a valid name.";
+                        return "Please enter a valid fisrt name.";
+                      }
+                    },
+                  ),
+                  CustomWidget.customSizeBox(context),
+                  CustomWidget.customTextFormField(
+                    labelName: "Last Name",
+                    controller: _lastNameController,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Last name can't be blank.";
                       }
                     },
                   ),
@@ -136,18 +102,6 @@ class _UserRegistrationState extends State<UserRegistration> {
                       }
                       if (!value.contains('@')) {
                         return "Enter a valid email.";
-                      }
-                    },
-                  ),
-                  CustomWidget.customSizeBox(context),
-                  CustomWidget.customTextFormField(
-                    labelName: "Mobile",
-                    controller: _mobileController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter mobile number.";
                       }
                     },
                   ),
@@ -186,7 +140,7 @@ class _UserRegistrationState extends State<UserRegistration> {
                       buttonName: "Submit",
                       backgroundColor: Colors.white,
                       fontSize: 20,
-                      onPressed: _registerUser,
+                      onPressed: _registerUser
                     ),
                   ),
                 ],
@@ -197,4 +151,31 @@ class _UserRegistrationState extends State<UserRegistration> {
       ),
     );
   }
+}
+
+void _showSuccessDialog(BuildContext context){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text("Registration Successful."),
+          content: Text("You have successfully registerd."),
+          actions: [
+            TextButton(onPressed: (){Navigator.pushReplacementNamed(context, '/landingpage');}, child: Text("OK"))
+          ],
+        );
+      });
+}
+void _showErrorDialog(BuildContext context){
+  showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text("Registration failed"),
+          content: Text("An error occurred during registration. Please try again."),
+          actions: [
+            TextButton(onPressed: (){Navigator.pop(context);;}, child: Text("OK"))
+          ],
+        );
+      });
 }
