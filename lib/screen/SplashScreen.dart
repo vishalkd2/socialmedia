@@ -16,8 +16,7 @@ class SplashScreen extends StatelessWidget {
       duration: 3000,
       splashTransition: SplashTransition.fadeTransition,
       curve: Curves.easeOut,
-      animationDuration: const Duration(seconds: 1),
-
+      animationDuration: const Duration(seconds: 1)
     );
   }
 }
